@@ -2,38 +2,62 @@ package aquarium;
 
 import java.util.Scanner;
 
-import aquarium.Fish.Direction;
-
 public class TestPrg {
 
 	public static void main(String[] args) {
 
-		// Breite und Tiefe des Aquariums eingeben
+		// Inititalisiere Aquariumwerte
 		System.out.println("Bitte geben Sie die Breite des Aquariums ein: ");
 		Scanner sc = new Scanner(System.in);
 		int aqWidth = sc.nextInt();
 
 		System.out.println("Bitte geben Sie die Tiefe des Aquariums ein: ");
-
 		int aqDepth = sc.nextInt();
 
-		sc.close();
+		System.out.println("Bitte geben Sie die Anzahl der Fische ein: ");
+		int aqNoFish = sc.nextInt();
 		
-		// Aquarium initialisieren
+		sc.close();
+
+		// Aquarium erzeugen
 		Aquarium aq = new Aquarium(aqWidth, aqDepth);
 
 		Direction rDir;
-		
+
 		// Füge in jeder Tiefenebene einen Fisch hinzu (mit Ausnahme der Bodenebene)
-		for (int i = 0; i < aqDepth - 1; i++) {
-			
+		Fish f = null;
+		int fType;
+		int randDepth;
+		
+		for (int i = 0; i < aqNoFish; i++) {
+
 			// Generiere per Zufall die Richtung, in die der Fisch schwimmen soll
 			if (Math.random() > 0.5) {
 				rDir = Direction.left;
 			} else {
 				rDir = Direction.right;
 			}
-			aq.addFish(i, rDir);
+
+			// Generiere per Zufall die Fischart
+			fType = (int) (Math.random() * 4);
+			switch (fType) {
+			case 0:
+				f = new Shark(rDir);
+				break;
+			case 1:
+				f = new SwordFish(rDir);
+				break;
+			case 2:
+				f = new StdFish(rDir);
+				break;
+			case 3:
+				f = new BlowFish(rDir);
+				break;
+			}
+
+			// Generiere die Schwimmtiefe
+			randDepth = (int) (Math.random() * (aqDepth - 1));
+			aq.addFish(randDepth, f);
 		}
 
 		while (true) {
